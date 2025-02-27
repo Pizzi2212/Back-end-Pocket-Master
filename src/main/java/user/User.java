@@ -1,6 +1,6 @@
 package user;
 
-import auth.Role;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
