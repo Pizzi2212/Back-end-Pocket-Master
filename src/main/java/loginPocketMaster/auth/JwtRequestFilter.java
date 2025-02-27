@@ -86,8 +86,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/error",
-            "/sw.js"
+            "/sw.js",
+            "/api/users/register",
+            "/api/users/login"
     );
-
-
 }
