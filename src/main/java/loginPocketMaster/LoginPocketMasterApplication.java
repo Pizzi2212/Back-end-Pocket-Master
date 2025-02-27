@@ -1,4 +1,4 @@
-package loginPocketMaster.loginPocketMaster;
+package loginPocketMaster;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
