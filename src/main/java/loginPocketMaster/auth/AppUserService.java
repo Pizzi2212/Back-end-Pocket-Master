@@ -52,7 +52,7 @@ public class AppUserService {
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return jwtTokenUtil.generateToken(userDetails);
+            return jwtTokenUtil.generateToken(String.valueOf(userDetails));
         } catch (AuthenticationException e) {
             throw new SecurityException("Credenziali non valide", e);
         }

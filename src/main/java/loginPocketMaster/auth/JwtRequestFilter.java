@@ -1,5 +1,6 @@
 package loginPocketMaster.auth;
 
+
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -52,9 +53,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         } else {
 
-                request.setAttribute("javax.servlet.error.exception", new JwtTokenMissingException("JWT Token is missing"));
-                request.getRequestDispatcher("/error").forward(request, response);
-                return;
+            request.setAttribute("javax.servlet.error.exception", new JwtTokenMissingException("JWT Token is missing"));
+            request.getRequestDispatcher("/error").forward(request, response);
+            return;
         }
 
         // Valida il token e configura l'autenticazione nel contesto di sicurezza
