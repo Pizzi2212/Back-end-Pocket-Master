@@ -1,37 +1,51 @@
 package auth;
 
-import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Set;
+import request.LoginRequest;
+import request.RegisterRequest;
+import user.UserRepository;
+import user.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
-@RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
-    private final AppUserService appUserService;
+    @Autowired
+    private UserService userService;
 
+    /**
+     * Endpoint POST per registrare un nuovo utente
+     */
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        appUserService.registerUser(
-                registerRequest.getUsername(),
-                registerRequest.getPassword(),
-                Set.of(Role.ROLE_USER) // Assegna il ruolo di default
-        );
-        return ResponseEntity.ok("Registrazione avvenuta con successo");
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+        try {
+            // Qui gestiamo la logica di registrazione
+            userService.registerUser(request);
+            return ResponseEntity.ok("Utente registrato con successo!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Errore durante la registrazione: " + e.getMessage());
+        }
     }
 
+    /**
+     * Endpoint POST per effettuare il login
+     * Ritorna un token (JWT o altro) se le credenziali sono valide.
+     */
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-        String token = appUserService.authenticateUser(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
-        );
-        return ResponseEntity.ok(new AuthResponse(token));
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest request) {
+        try {
+
+            String token = userService.loginUser(request);
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Credenziali non valide: " + e.getMessage());
+        }
     }
 }
