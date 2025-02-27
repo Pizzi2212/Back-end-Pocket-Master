@@ -88,6 +88,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             "/error",
             "/sw.js",
             "/api/users/register",
-            "/api/users/login"
+            "/api/users/login",
+            "/api/users/{id}",
+            "/api/users"
     );
+
 }
