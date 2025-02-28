@@ -3,14 +3,13 @@ package loginPocketMaster.auth;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import loginPocketMaster.user.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,20 +47,21 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-        List<String> roles = authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .claim("roles", roles)
+                .setSubject(user.getEmail()) // L'email è l'identificativo principale
+                .claim("id", user.getId()) // Aggiunge l'ID utente nel token
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMs))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return claims.get("id", Long.class);
+    }
+
 
 
     public String generateToken(String email) {
@@ -72,6 +72,9 @@ public class JwtTokenUtil {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
+
+
+
 
     public List<String> getRolesFromToken(String token) {
         Claims claims = getAllClaimsFromToken(token);

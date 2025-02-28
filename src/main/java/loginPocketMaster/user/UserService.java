@@ -39,10 +39,11 @@ public class UserService {
     }
 
     public String loginUser(LoginDTO loginDTO) {
-        Optional<User> user = userRepository.findByEmail(loginDTO.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(loginDTO.getEmail());
 
-        if (user.isPresent() && passwordEncoder.matches(loginDTO.getPassword(), user.get().getPassword())) {
-            return jwtTokenUtil.generateToken(user.get().getEmail());
+        if (userOptional.isPresent() && passwordEncoder.matches(loginDTO.getPassword(), userOptional.get().getPassword())) {
+            User user = userOptional.get();
+            return jwtTokenUtil.generateToken(user); // Ora passiamo l'oggetto User
         } else {
             throw new RuntimeException("Invalid email or password");
         }
