@@ -1,6 +1,5 @@
 package loginPocketMaster.comment;
 
-
 import jakarta.transaction.Transactional;
 import loginPocketMaster.user.User;
 import loginPocketMaster.user.UserRepository;
@@ -18,20 +17,23 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
-    public Comment addComment(Long userId, String teamName, String content) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Comment addComment(Long userId, String content) {
+        System.out.println("🔍 addComment: userId=" + userId + ", content=" + content);
 
-        Comment comment = new Comment(user, teamName, content);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("❌ User not found"));
+
+        Comment comment = new Comment(user, content);
         return commentRepository.save(comment);
+    }
+
+
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
     }
 
     public List<Comment> getCommentsByUser(Long userId) {
         return commentRepository.findByUserId(userId);
-    }
-
-    public List<Comment> getCommentsByTeam(String teamName) {
-        return commentRepository.findByTeamName(teamName);
     }
 
     @Transactional

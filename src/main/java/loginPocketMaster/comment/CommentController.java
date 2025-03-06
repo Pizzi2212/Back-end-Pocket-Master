@@ -10,7 +10,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/comments")
 @CrossOrigin(origins = "*")
-@Tag(name = "Comment Controller", description = "Comment Controller")
+@Tag(name = "Comment Controller", description = "API per gestire i commenti generali")
 public class CommentController {
     private final CommentService commentService;
 
@@ -18,30 +18,24 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-
     @CrossOrigin(origins = "*")
     @PostMapping
     public ResponseEntity<Comment> addComment(@RequestBody Map<String, String> request) {
         Long userId = Long.parseLong(request.get("userId"));
-        String teamName = request.get("teamName");
         String content = request.get("content");
 
-        return ResponseEntity.ok(commentService.addComment(userId, teamName, content));
+        return ResponseEntity.ok(commentService.addComment(userId, content));
     }
 
-
+    @GetMapping
+    public ResponseEntity<List<Comment>> getAllComments() {
+        return ResponseEntity.ok(commentService.getAllComments());
+    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Comment>> getUserComments(@PathVariable Long userId) {
         return ResponseEntity.ok(commentService.getCommentsByUser(userId));
     }
-
-
-    @GetMapping("/team/{teamName}")
-    public ResponseEntity<List<Comment>> getTeamComments(@PathVariable String teamName) {
-        return ResponseEntity.ok(commentService.getCommentsByTeam(teamName));
-    }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Map<String, String> request) {
@@ -50,11 +44,12 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return ResponseEntity.ok("Comment deleted successfully");
     }
 }
+
+
 

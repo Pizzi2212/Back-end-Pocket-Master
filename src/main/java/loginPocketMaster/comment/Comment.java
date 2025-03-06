@@ -19,18 +19,17 @@ public class Comment {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String teamName;
+    @Column(nullable = false)
     private String content;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Comment(User user,String teamName, String content) {
+    public Comment(User user, String content) {
         this.user = user;
-        this.teamName = teamName;
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }
-
 }
