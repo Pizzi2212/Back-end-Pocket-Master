@@ -35,7 +35,8 @@ public class TeamService {
 
         return Map.of(
                 "teamName", team.getName(),
-                "pokemons", pokemons
+                "pokemons", pokemons,
+                "description", team.getDescription()
         );
     }
 

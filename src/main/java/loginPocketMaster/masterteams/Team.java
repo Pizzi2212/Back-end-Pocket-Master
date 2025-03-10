@@ -17,6 +17,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private  Long id;
     private String name;
+    private String description;
 
     @ElementCollection
     private List<String> pokemonNames;
