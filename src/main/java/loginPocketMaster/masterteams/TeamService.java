@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 @Service
 public class TeamService {
     private final TeamRepository teamRepository;
@@ -18,25 +19,26 @@ public class TeamService {
         this.restTemplate = new RestTemplate();
     }
 
-
     public List<Team> getAllTeams() {
         return teamRepository.findAll();
     }
 
-
     public Map<String, Object> getTeamWithPokemon(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("Team non trovato"));
+                .orElseThrow(() -> new RuntimeException("Team not found"));
 
-        // Chiamate alla PokéAPI per ottenere i dettagli di ogni Pokémon
-        List<Map<String, Object>> pokemons = team.getPokemonNames().stream()
+        // Recupera la lista di Pokémon e chiama la PokéAPI per ottenere i dettagli
+        Map<String, String> pokemonDescriptions = team.getPokemonNames();
+
+        List<Map<String, Object>> pokemons = pokemonDescriptions.keySet().stream()
                 .map(this::fetchPokemonFromApi)
                 .collect(Collectors.toList());
 
         return Map.of(
                 "teamName", team.getName(),
+                "description", team.getDescription(),
                 "pokemons", pokemons,
-                "description", team.getDescription()
+                "pokemonDescriptions", pokemonDescriptions
         );
     }
 

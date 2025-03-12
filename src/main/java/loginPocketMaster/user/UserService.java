@@ -43,7 +43,7 @@ public class UserService {
 
         if (userOptional.isPresent() && passwordEncoder.matches(loginDTO.getPassword(), userOptional.get().getPassword())) {
             User user = userOptional.get();
-            return jwtTokenUtil.generateToken(user); 
+            return jwtTokenUtil.generateToken(user);
         } else {
             throw new RuntimeException("Invalid email or password");
         }
