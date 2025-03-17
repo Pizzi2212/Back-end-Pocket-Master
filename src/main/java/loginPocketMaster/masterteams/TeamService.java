@@ -27,7 +27,7 @@ public class TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Team not found"));
 
-        // Recupera la lista di Pokémon e chiama la PokéAPI per ottenere i dettagli
+        
         Map<String, String> pokemonDescriptions = team.getPokemonNames();
 
         List<Map<String, Object>> pokemons = pokemonDescriptions.keySet().stream()
