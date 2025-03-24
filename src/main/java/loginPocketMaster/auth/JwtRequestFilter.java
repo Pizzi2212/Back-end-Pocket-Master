@@ -91,7 +91,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             "/api/users/login",
             "/api/users/{id}",
             "/api/users",
-            "/api/comments"
+            "/api/comments",
+            "/api/faq",
+            "/api/music"
+
     );
 
 }
